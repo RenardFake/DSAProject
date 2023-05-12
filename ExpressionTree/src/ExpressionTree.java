@@ -6,6 +6,7 @@ class Node{
     char character;
     Node left=null;
     Node right=null;
+    int number=0;
     public Node(char character){
         this.character=character;
         left=right=null;
@@ -25,7 +26,7 @@ public class ExpressionTree {
         //contructor need to refactorize this
         this.input=input;
     }
-
+    //check if is operator
     boolean isOperator(char op){
         if(op=='^'||op=='*'||op=='/'||op=='+'||op=='-' ){
             return true;
@@ -33,7 +34,7 @@ public class ExpressionTree {
         return false; 
       
     }
-
+    //check the if the char is operator
     int pemdas(char op){
         if(op=='-'|| op=='+'){
             return 1;
@@ -46,51 +47,50 @@ public class ExpressionTree {
         }
         return 0;
     }
-    void traversal(Node root){
+    void traverse(Node root){
         if(root==null){
             return;
         }
-        traversal(root.left);
+        traverse(root.left);
         System.out.print(root.character);
-        traversal(root.right);
+        traverse(root.right);
     }
+    Node tree(){
+        
+        Stack<Node> operand = new Stack<>();
+        for(int i=0;i<input.length();i++){
+            if(input.charAt(i)=='('&&input.charAt(i)==')'){
+                temp=null;
+           
+            }
+            if(!isOperator(input.charAt(i))){
+                temp=new Node(input.charAt(i));
+                operand.push(temp);
+            }
+            else{
+                //operator push 
+                temp= new Node(input.charAt(i));
 
-   
-    Node FixExpression(){
-        Stack<Node> st = new Stack<Node>();
-        for(int i=0;i<input.length();i++){
-            if(input.charAt(i)=='('){
-                st.push(null);
+                temp1=operand.pop();
+                temp2=operand.pop();
+
+                temp.left=temp2;
+                temp.right=temp1;
+
+                operand.push(temp);
             }
-            if(!isOperator(data))
+
         }
-        
-       
+        temp=operand.pop();
+        return temp;
     }
-    void FindLeaf(Node root){
-        Scanner newleaf = new Scanner(System.in);
-        for(int i=0;i<input.length();i++){
-            if(root==null){
-                return;
-            }
-            if(root.left==null&&root.right==null){
-                System.out.println("What are the values for "+root.character);
-                int newNumber=newleaf.nextInt();
-                root.character=(char) newNumber;
-            }
-        }
-        
-    }
-    /*int changevalue(){
-        return;
-    }*/
     
     public  void Interface() {
         Scanner s = new Scanner(System.in);
-            Node fix = FixExpression();
-            System.out.println("Expression Tree has been created");
-            traversal(fix);
-            System.out.println();
-            FindLeaf(fix);
+        System.out.println("Expression Tree has been created");
+        Node fix = tree();
+        traverse(fix);
+        System.out.println("Why di nagana ");
+           
     }
 }
